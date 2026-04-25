@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { ONLINE_TESTS } from '../../services/syllabusData'
 import { ClipboardList, Clock, CheckCircle, XCircle, ChevronRight,
-  AlertCircle, Trophy, RotateCcw, BookOpen } from 'lucide-react'
+  AlertCircle, Trophy, RotateCcw, BookOpen, Coins } from 'lucide-react'
+import { useGamification } from '../../hooks/useGamification'
 
 const SUBJECT_COLORS = {
   Mathematics: 'bg-blue-50 dark:bg-blue-900/20 text-blue-600 border-blue-200 dark:border-blue-800',
@@ -17,7 +18,9 @@ export default function StudentTests() {
   const [answers, setAnswers]     = useState({})
   const [timeLeft, setTimeLeft]   = useState(0)
   const [result, setResult]       = useState(null)
+  const [coinsEarned, setCoinsEarned] = useState(0)
   const timerRef = useRef(null)
+  const { awardPracticeCoins, COINS_PER_CORRECT } = useGamification()
 
   // Timer
   useEffect(() => {
@@ -43,19 +46,22 @@ export default function StudentTests() {
     clearInterval(timerRef.current)
     const test = activeTest
     let score = 0
+    let correctCount = 0
     const evaluated = test.questions.map(q => {
       if (q.type === 'mcq') {
         const selected = answers[q.id]
         const correct  = selected === q.correct
-        if (correct) score += q.marks
+        if (correct) { score += q.marks; correctCount++ }
         return { ...q, selected, correct, attempted: selected !== undefined }
       } else {
-        // descriptive: give partial marks if attempted
         const attempted = !!(answers[q.id]?.trim())
-        if (attempted) score += Math.floor(q.marks * 0.6) // partial credit
+        if (attempted) score += Math.floor(q.marks * 0.6)
         return { ...q, userAnswer: answers[q.id] || '', attempted }
       }
     })
+    const earned = correctCount * COINS_PER_CORRECT
+    setCoinsEarned(earned)
+    awardPracticeCoins(test.id, test.title, test.subject, correctCount, test.questions.length, score, test.totalMarks)
     setResult({ score, total: test.totalMarks, questions: evaluated, autoSubmit: auto })
     setTests(prev => prev.map(t => t.id === test.id ? { ...t, status: 'completed', score } : t))
     setView('result')
@@ -224,6 +230,11 @@ export default function StudentTests() {
         <p className={`text-sm font-medium mt-2 ${pct >= 70 ? 'text-green-600' : 'text-red-600'}`}>
           {pct >= 90 ? '🌟 Excellent!' : pct >= 70 ? '✅ Good job!' : pct >= 50 ? '📚 Keep practicing' : '💪 Needs improvement'}
         </p>
+        {coinsEarned > 0 && (
+          <div className="inline-flex items-center gap-2 mt-3 px-4 py-2 rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 font-bold text-sm">
+            <Coins size={15} /> +{coinsEarned} coins earned!
+          </div>
+        )}
       </div>
 
       {/* Answer review */}

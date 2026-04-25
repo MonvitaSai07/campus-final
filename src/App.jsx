@@ -19,6 +19,7 @@ import StudentTextbook from './pages/student/StudentTextbook'
 import StudentStudyMaterials from './pages/student/StudentStudyMaterials'
 import StudentDoubtSolver from './pages/student/StudentDoubtSolver'
 import StudentAssignments from './pages/student/StudentAssignments'
+import StudentRewards from './pages/student/StudentRewards'
 import ParentLayout from './pages/parent/ParentLayout'
 import ParentDashboard from './pages/parent/ParentDashboard'
 import ParentAttendance from './pages/parent/ParentAttendance'
@@ -78,6 +79,7 @@ export default function App() {
                 <Route path="textbook" element={<StudentTextbook />} />
                 <Route path="study-materials" element={<StudentStudyMaterials />} />
                 <Route path="doubt-solver" element={<StudentDoubtSolver />} />
+                <Route path="rewards" element={<StudentRewards />} />
               </Route>
 
               {/* Parent Routes */}

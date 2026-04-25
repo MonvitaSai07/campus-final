@@ -3,7 +3,7 @@ import { Outlet, NavLink, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard, CalendarDays, BarChart2, BookOpen,
   Clock, FileText, CreditCard, HelpCircle, Sparkles,
-  X, GraduationCap, ClipboardList, MessageCircle, BookMarked, Menu
+  X, GraduationCap, ClipboardList, MessageCircle, BookMarked, Menu, Trophy
 } from 'lucide-react'
 import Topbar from '../../components/Topbar'
 
@@ -14,6 +14,7 @@ const nav = [
   { to:'/student/timetable',       label:'Timetable',      icon:Clock },
   { to:'/student/exams',           label:'Exams',          icon:FileText },
   { to:'/student/tests',           label:'Online Tests',   icon:ClipboardList },
+  { to:'/student/rewards',         label:'Rewards',        icon:Trophy },
   { to:'/student/textbook',        label:'Textbook',       icon:BookMarked },
   { to:'/student/study-materials', label:'Study Materials',icon:Sparkles },
   { to:'/student/doubt-solver',    label:'Doubt Solver',   icon:MessageCircle },
@@ -26,6 +27,7 @@ const titles = {
   '/student':'Dashboard', '/student/attendance':'Attendance',
   '/student/grades':'Grades', '/student/timetable':'Timetable',
   '/student/exams':'Exams', '/student/tests':'Online Tests',
+  '/student/rewards':'Rewards',
   '/student/textbook':'Textbook', '/student/study-materials':'Study Materials',
   '/student/doubt-solver':'Doubt Solver', '/student/id-card':'ID Card',
   '/student/helpdesk':'Helpdesk', '/student/ai-insights':'AI Insights',
